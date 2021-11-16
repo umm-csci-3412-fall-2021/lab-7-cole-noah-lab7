@@ -1,19 +1,10 @@
 package segmentedfilesystem;
 
-public abstract class Packet {
-    public int fileId;
-    public int status;
+abstract class Packet {
+    byte[] data;
+    int length;
 
-    public Packet(int fileId, int status) {
-        this.fileId = fileId;
-        this.status = status;
-    }
-
-    public int getFileId() {
-        return fileId;
-    }
-
-    public int getStatus() {
-        return status;
-    }
+    public int getFileId(byte[] data, int length) {
+        return Byte.toUnsignedInt(data[1]);
+    } 
 }
