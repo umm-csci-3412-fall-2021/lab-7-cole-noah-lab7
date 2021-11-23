@@ -1,5 +1,7 @@
 package segmentedfilesystem;
 
+import java.util.Arrays;
+
 public class DataPacket extends Packet {
 
     public DataPacket(byte[] data, int length) {
@@ -9,10 +11,13 @@ public class DataPacket extends Packet {
 
     // Get the data from the data packet    
     public byte[] getData() {
-        byte[] data = new byte[length-4];
-        for (int i = 0; i < length-4; i++) 
-            data[i] = data[i+4]; //Start at index 4 because of the 4 byte header
-        return data;
+        byte[] packetData = new byte[length-4];
+        for (int i = 4; i < length; i++) {
+            packetData[i-4] = data[i]; //Start at index 4 because of the 4 byte header
+        }
+        // System.out.println("Packet # " + getPacketNumber() + ": <" + new String(packetData) + ">");
+        System.out.println("new packet length = " + packetData.length);
+        return packetData;
     }
 
     // Get the packet number from the packet
@@ -23,5 +28,9 @@ public class DataPacket extends Packet {
         int secondInt = Byte.toUnsignedInt(secondByte);
         int packetNumber = firstInt * 256 + secondInt; //Convert to one long int
         return packetNumber;
+    }
+
+    public byte[] trimNulls(byte[] bytes, int length) {
+        return Arrays.copyOfRange(bytes, 0, length);
     }
 }

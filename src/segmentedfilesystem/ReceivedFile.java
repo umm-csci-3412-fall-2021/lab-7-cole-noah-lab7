@@ -7,24 +7,26 @@ import java.util.TreeMap;
 
 public class ReceivedFile {
     
-    TreeMap<Integer, DataPacket> file;
+    TreeMap<Integer, byte[]> file;
     String fileName;
     int lastPacketNum = -2;
     byte[] finalByteArray;
 
     public void newFile(Packet packet) {
-        TreeMap<Integer, DataPacket> file = new TreeMap<>();
+        TreeMap<Integer, byte[]> file = new TreeMap<>();
         if (packet instanceof HeaderPacket) {
             HeaderPacket headerPacket = (HeaderPacket) packet;
             fileName = headerPacket.getFileName();
         } else {
             DataPacket dataPacket = (DataPacket) packet;
             int packetNum = dataPacket.getPacketNumber();
-            file.put(packetNum, dataPacket);
+            byte[] packetData = dataPacket.getData();
+            file.put(packetNum, packetData);
         }
 
         if(packet.isLastPacket()) {
-            lastPacketNum = packet.getFileId();
+            DataPacket dataPacket = (DataPacket) packet;
+            lastPacketNum = dataPacket.getPacketNumber();
         }
 
         this.file = file;
@@ -38,11 +40,13 @@ public class ReceivedFile {
         } else {
             DataPacket dataPacket = (DataPacket) packet;
             int packetNum = dataPacket.getPacketNumber();
-            file.put(packetNum, dataPacket);
+            byte[] packetData = dataPacket.getData();
+            file.put(packetNum, packetData);
         }
 
         if(packet.isLastPacket()) {
-            lastPacketNum = packet.getFileId();
+            DataPacket dataPacket = (DataPacket) packet;
+            lastPacketNum = dataPacket.getPacketNumber();
         }
 
         if(allPacketsReceived()) {
@@ -54,10 +58,18 @@ public class ReceivedFile {
     public void writeToByteArray(){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            for(DataPacket packet : file.values()) {
-                baos.write(packet.getData());
+            for (int i = 0; i <= lastPacketNum; i++) {
+                if (fileName.equals("small.txt")) {
+                    System.out.println("Packet " + i + " of file " + fileName + ": <" + new String(file.get(i)) + ">");
+                    System.out.println("Packet length = " + file.get(i).length);
+                }
+                baos.write(file.get(i));
             }
             finalByteArray = baos.toByteArray();
+            if (fileName.equals("small.txt")) {
+                System.out.println("Final byte array : " + new String(finalByteArray));
+                System.out.println("Length = " + finalByteArray.length);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,7 +1,7 @@
 package segmentedfilesystem;
 
 abstract class Packet {
-    byte[] data;
+    protected byte[] data;
     int length;
 
     public int getFileId() {
@@ -13,7 +13,6 @@ abstract class Packet {
     }
 
     public boolean isLastPacket() {
-        int status = getStatus();
-        return (status % 4 == 3);
+        return (getStatus() % 4 == 3);
     }
 }

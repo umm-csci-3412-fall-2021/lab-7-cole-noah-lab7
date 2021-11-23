@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.net.InetAddress;
 
 public class FileRetriever {
@@ -32,10 +31,10 @@ public class FileRetriever {
                 // ways.
 
                 try {
-                        boolean done = true;
+                        boolean done = false;
                         PacketManager packetManager = new PacketManager();
                         DatagramSocket socket = new DatagramSocket();
-                        byte[] buf = null;
+                        byte[] buf = new byte[1028];
                         InetAddress ip = InetAddress.getByName(server);
                         DatagramPacket helloPacket = new DatagramPacket(buf, buf.length, ip, port);
                         socket.send(helloPacket);
@@ -45,10 +44,13 @@ public class FileRetriever {
                                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                                 socket.receive(packet);
 
-                                packetManager.sortPackets(packet);
+                                byte[] data = packet.getData();
+                                int length = packet.getLength();
+
+                                packetManager.sortPackets(data, length);
 
                                 if (packetManager.allPacketsReceived()) {
-                                        done = false;
+                                        done = true;
                                         socket.close();
                                 }
                         }

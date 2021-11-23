@@ -14,9 +14,12 @@ public class PacketManager {
         int fileId = packet.getFileId();
 
         for (int i = 0; i < idArray.length; i++) {
-            if (idArray[i] == fileId) {
-                fileIdIndex = i;
-                break;
+            if (fileId == idArray[0]) {
+                file1.addPacket(packet);
+            } else if (fileId == idArray[1]) {
+                file2.addPacket(packet);
+            } else if (fileId == idArray[2]) {
+                file3.addPacket(packet);
             } else {
                 checkFiles(packet);
                 idArray[fileIdIndex] = fileId;
@@ -39,10 +42,7 @@ public class PacketManager {
         }
     }
 
-    public void sortPackets(DatagramPacket packet) {
-        byte[] data = packet.getData();
-        int length = packet.getLength();
-
+    public void sortPackets(byte[] data, int length) {
         if (getStatus(data) % 2 == 0) {
             HeaderPacket headerPacket = new HeaderPacket(data, length);
             assignPacketToFile(headerPacket);
