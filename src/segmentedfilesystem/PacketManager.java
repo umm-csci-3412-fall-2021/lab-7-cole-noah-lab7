@@ -30,18 +30,12 @@ public class PacketManager {
         if (file1 == null){
             file1 = new ReceivedFile();
         }
-        switch(-1){
-            case idArray[0]:
-                file1.newFile(packet);
-                break;
-            case idArray[1]:
-                file2.newFile(packet);
-                break;
-            case idArray[2]:
-                file3.newFile(packet);
-                break;
-            default:
-                break;
+        if(idArray[0] == -1){
+            file1.newFile(packet);
+        } else if (idArray[1] == -1){
+            file2.newFile(packet);
+        } else if (idArray[2] == -1) {
+            file3.newFile(packet);
         }
     }
 
@@ -55,6 +49,16 @@ public class PacketManager {
         } else {
             DataPacket dataPacket = new DataPacket(data, length);
             assignPacketToFile(dataPacket);
+        }
+    }
+
+    public static boolean allPacketsReceived(){
+        //if file1 & file2 & file3 are all done,
+        //then return true. otherwise return false
+        if (file1.allPacketsReceived() && file2.allPacketsReceived() && file3.allPacketsReceived()){
+            return true;
+        } else {
+            return false;
         }
     }
 

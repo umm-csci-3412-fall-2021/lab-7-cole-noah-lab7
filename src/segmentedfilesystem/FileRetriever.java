@@ -31,16 +31,34 @@ public class FileRetriever {
                 // call for that, but there are a bunch of possible
                 // ways.
 
-                DatagramSocket socket = new DatagramSocket();
-                byte[] buf = null;
-                InetAddress ip = InetAddress.getByName(server);
-                DatagramPacket helloPacket = new DatagramPacket(buf, buf.length, ip, port);
-                socket.send(helloPacket);
+                try {
+                        boolean done = true;
+                        PacketManager packetManager = new PacketManager();
+                        DatagramSocket socket = new DatagramSocket();
+                        byte[] buf = null;
+                        InetAddress ip = InetAddress.getByName(server);
+                        DatagramPacket helloPacket = new DatagramPacket(buf, buf.length, ip, port);
+                        socket.send(helloPacket);
 
-                while (true) {
-                        buf = new byte[1028];
-                        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                        while (!done) {
+                                buf = new byte[1028];
+                                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                                socket.receive(packet);
+
+                                packetManager.sortPackets(packet);
+
+                                if (packetManager.allPacketsReceived()) {
+                                        done = false;
+                                        socket.close();
+                                }
+                        }
+                } catch (SocketException e) {
+                        System.out.println("Socket: " + e.getMessage());
+                } catch (IOException e) {
+                        System.out.println("IO: " + e.getMessage());
                 }
+
+                
         }
 
 }
