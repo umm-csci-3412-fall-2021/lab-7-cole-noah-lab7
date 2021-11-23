@@ -1,6 +1,12 @@
 package segmentedfilesystem;
 
 public class HeaderPacket extends Packet {
+
+    public HeaderPacket(byte[] data, int length) {
+        this.data = data;
+        this.length = length;
+    }
+
     public String getFileName() {
         byte[] byteName = new byte[length-2];
         for (int i = 0; i < length-2; i++) 

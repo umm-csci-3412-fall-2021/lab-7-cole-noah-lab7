@@ -9,7 +9,7 @@ public class Main {
         String server = "localhost";
         // CHANGE THIS DEFAULT PORT TO THE PORT NUMBER PROVIDED
         // BY THE INSTRUCTOR.
-        int port = 0;
+        int port = 6014;
         
         if (args.length >= 1) {
             server = args[0];

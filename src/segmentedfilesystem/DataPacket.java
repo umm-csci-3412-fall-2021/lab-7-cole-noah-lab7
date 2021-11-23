@@ -1,6 +1,12 @@
 package segmentedfilesystem;
 
 public class DataPacket extends Packet {
+
+    public DataPacket(byte[] data, int length) {
+        this.data = data;
+        this.length = length;
+    }
+
     // Get the data from the data packet    
     public byte[] getData() {
         byte[] data = new byte[length-4];
