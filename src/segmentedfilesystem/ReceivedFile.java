@@ -59,17 +59,9 @@ public class ReceivedFile {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             for (int i = 0; i <= lastPacketNum; i++) {
-                if (fileName.equals("small.txt")) {
-                    System.out.println("Packet " + i + " of file " + fileName + ": <" + new String(file.get(i)) + ">");
-                    System.out.println("Packet length = " + file.get(i).length);
-                }
                 baos.write(file.get(i));
             }
             finalByteArray = baos.toByteArray();
-            if (fileName.equals("small.txt")) {
-                System.out.println("Final byte array : " + new String(finalByteArray));
-                System.out.println("Length = " + finalByteArray.length);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

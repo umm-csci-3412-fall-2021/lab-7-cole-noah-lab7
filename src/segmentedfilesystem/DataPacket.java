@@ -15,8 +15,6 @@ public class DataPacket extends Packet {
         for (int i = 4; i < length; i++) {
             packetData[i-4] = data[i]; //Start at index 4 because of the 4 byte header
         }
-        // System.out.println("Packet # " + getPacketNumber() + ": <" + new String(packetData) + ">");
-        System.out.println("new packet length = " + packetData.length);
         return packetData;
     }
 
